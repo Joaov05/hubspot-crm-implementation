@@ -1,0 +1,85 @@
+# Pipelines with entry and exit criteria for every stage.
+# Deal probabilities are decimals (0.0-1.0) and must increase along the open stages.
+
+deals:
+  - label: New business
+    requirement: R4
+    description: Every new customer opportunity, from first discovery call to signature.
+    stages:
+      - label: Discovery
+        probability: 0.10
+        entry: SQL accepted and discovery meeting booked
+        exit: Pain, current tool and monthly shipments recorded
+      - label: Demo
+        probability: 0.25
+        entry: Discovery done and the customer agreed to see the platform
+        exit: Demo held and primary pain recorded
+      - label: Technical validation
+        probability: 0.40
+        entry: Customer IT or operations reviewing integrations (ERP, e-commerce)
+        exit: Integration path confirmed and implementation effort estimated
+      - label: Proposal
+        probability: 0.60
+        entry: Decision maker identified and proposal sent
+        exit: Proposal reviewed with the decision maker
+      - label: Negotiation
+        probability: 0.80
+        entry: Customer negotiating terms or in legal review
+        exit: Contract signed or deal lost
+      - label: Closed won
+        probability: 1.0
+        entry: Contract signed. Creates the onboarding ticket
+      - label: Closed lost
+        probability: 0.0
+        entry: Customer declined. Closed lost category is required
+
+  - label: Expansion and renewal
+    requirement: R9
+    description: Upsell and renewal opportunities on existing customers, owned by CS and AEs.
+    stages:
+      - label: Opportunity identified
+        probability: 0.20
+        entry: Upsell signal or renewal within 90 days
+        exit: Customer confirms interest or renewal conversation is booked
+      - label: Proposal sent
+        probability: 0.50
+        entry: Commercial proposal sent
+        exit: Customer gives feedback on the proposal
+      - label: Negotiation
+        probability: 0.75
+        entry: Terms being discussed
+        exit: Signed or lost
+      - label: Won
+        probability: 1.0
+        entry: Contract signed. Current MRR and renewal date are updated on the company
+      - label: Lost
+        probability: 0.0
+        entry: Customer declined the upsell or did not renew
+
+tickets:
+  - label: Customer onboarding
+    requirement: R7
+    description: From closed won to a customer who uses the platform on their own. Target is go-live in 30 days.
+    stages:
+      - label: Kickoff scheduled
+        state: OPEN
+        entry: Created automatically when a New business deal is closed won
+        exit: Kickoff meeting held (SLA 2 business days)
+      - label: Integration setup
+        state: OPEN
+        entry: Access granted and integration plan agreed
+        exit: ERP / e-commerce integration tested
+      - label: Training
+        state: OPEN
+        entry: Integration working in test
+        exit: Operations team trained
+      - label: Go-live
+        state: OPEN
+        entry: First real shipments quoted on the platform
+        exit: Two weeks of stable usage
+      - label: Onboarding complete
+        state: CLOSED
+        entry: Customer handed over to the CSM for ongoing success
+      - label: Onboarding cancelled
+        state: CLOSED
+        entry: Customer cancelled before go-live

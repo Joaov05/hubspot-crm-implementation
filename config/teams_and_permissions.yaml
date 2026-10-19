@@ -1,0 +1,31 @@
+# Team structure and permission matrix.
+# Applied manually in Settings > Users & Teams (HubSpot does not expose permission sets to the API used here).
+# Access levels: edit_all | edit_team | edit_own | view_all | view_own | none
+
+teams:
+  - name: Marketing
+    members: 2
+  - name: SDR
+    members: 3
+  - name: Sales
+    members: 4
+  - name: Customer Success
+    members: 3
+  - name: RevOps
+    members: 1
+
+permissions:
+  #                 contacts      companies    deals        tickets      settings
+  Marketing:        [edit_all,    view_all,    view_all,    none,        none]
+  SDR:              [edit_team,   edit_team,   view_all,    none,        none]
+  Sales:            [edit_own,    edit_own,    edit_own,    view_all,    none]
+  Customer Success: [view_all,    edit_all,    edit_team,   edit_all,    none]
+  RevOps:           [edit_all,    edit_all,    edit_all,    edit_all,    edit_all]
+
+permission_columns: [contacts, companies, deals, tickets, settings]
+
+rules:
+  - Only RevOps creates or edits properties, pipelines and workflows (super admin).
+  - Exporting records is allowed for RevOps and team leads only.
+  - Sales sees all deals in read-only mode, so the pipeline review uses one shared view.
+  - Deleting records is restricted to RevOps; everyone else archives or marks as Other.

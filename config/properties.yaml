@@ -1,0 +1,215 @@
+# Custom properties for Rotalog's HubSpot portal.
+# Every property has a business owner and the requirement (docs/01_discovery.md) it serves.
+# Naming convention: snake_case internal names, Sentence case labels (see docs/05_governance.md).
+
+contacts:
+  - internal_name: buyer_persona_role
+    label: Buyer persona
+    type: enumeration
+    owner: Marketing
+    requirement: R2
+    description: Role of the contact in the buying decision. Used in the MQL fit criteria.
+    options:
+      - [logistics_manager, Logistics manager]
+      - [operations_director, Operations director]
+      - [c_level, C-level]
+      - [it_integrations, IT / Integrations]
+      - [finance, Finance]
+      - [other, Other]
+
+  - internal_name: lead_channel
+    label: Lead channel
+    type: enumeration
+    owner: Marketing
+    requirement: R1
+    description: Business channel that generated the lead. Complements HubSpot's original source with sales-led channels.
+    options:
+      - [inbound_website, Inbound - Website]
+      - [inbound_event, Inbound - Event]
+      - [outbound_sdr, Outbound - SDR]
+      - [partner_referral, Partner referral]
+      - [customer_referral, Customer referral]
+
+  - internal_name: mql_reason
+    label: MQL reason
+    type: enumeration
+    owner: Marketing
+    requirement: R2
+    description: Which intent signal made the contact an MQL.
+    options:
+      - [demo_request, Demo request]
+      - [pricing_page, Pricing page visit + fit]
+      - [event_conversation, Event conversation + fit]
+      - [content_plus_fit, Content download + strong fit]
+
+  - internal_name: disqualification_reason
+    label: Disqualification reason
+    type: enumeration
+    owner: SDR
+    requirement: R3
+    description: Required when lead status is Unqualified.
+    options:
+      - [not_icp, Not ICP]
+      - [no_budget, No budget]
+      - [no_timing, No timing]
+      - [using_competitor, Happy with current solution]
+      - [unreachable, Unreachable after 6 attempts]
+      - [duplicate, Duplicate]
+
+companies:
+  - internal_name: company_segment
+    label: Company segment
+    type: enumeration
+    owner: RevOps
+    requirement: R11
+    description: "Sales segment, based on monthly shipments: SMB < 1k, Mid-Market 1k-10k, Enterprise > 10k."
+    options:
+      - [smb, SMB]
+      - [mid_market, Mid-Market]
+      - [enterprise, Enterprise]
+
+  - internal_name: monthly_shipments
+    label: Monthly shipments
+    type: number
+    owner: SDR
+    requirement: R11
+    description: Average number of shipments per month. The main sizing metric for a logistics platform.
+
+  - internal_name: current_logistics_tool
+    label: Current logistics tool
+    type: enumeration
+    owner: SDR
+    requirement: R11
+    description: How the company manages freight today.
+    options:
+      - [spreadsheets, Spreadsheets]
+      - [in_house_system, In-house system]
+      - [other_tms, Another TMS / freight platform]
+      - [erp_module, ERP module]
+      - [none, No tool]
+
+  - internal_name: erp_platform
+    label: ERP platform
+    type: enumeration
+    owner: SDR
+    requirement: R11
+    description: ERP used by the company. Drives implementation effort and the integration plan.
+    options:
+      - [sap, SAP]
+      - [totvs, TOTVS]
+      - [oracle, Oracle]
+      - [bling, Bling]
+      - [tiny, Tiny]
+      - [other, Other]
+      - [none, None]
+
+  - internal_name: ecommerce_platform
+    label: E-commerce platform
+    type: enumeration
+    owner: SDR
+    requirement: R11
+    description: E-commerce platform, when the company sells online.
+    options:
+      - [vtex, VTEX]
+      - [shopify, Shopify]
+      - [magento, Magento / Adobe Commerce]
+      - [nuvemshop, Nuvemshop]
+      - [other, Other]
+      - [none, Does not sell online]
+
+  - internal_name: customer_health
+    label: Customer health
+    type: enumeration
+    owner: Customer Success
+    requirement: R8
+    description: CSM assessment, updated at least monthly for every customer.
+    options:
+      - [healthy, Healthy]
+      - [attention, Needs attention]
+      - [at_risk, At risk]
+
+  - internal_name: current_mrr
+    label: Current MRR
+    type: currency_number
+    owner: Customer Success
+    requirement: R8
+    description: Monthly recurring revenue currently billed to the customer (BRL).
+
+  - internal_name: contract_renewal_date
+    label: Contract renewal date
+    type: date
+    owner: Customer Success
+    requirement: R8
+    description: Next contract renewal. Feeds the renewals segment and the Expansion & Renewal pipeline.
+
+deals:
+  - internal_name: revenue_motion
+    label: Revenue motion
+    type: enumeration
+    owner: RevOps
+    requirement: R9
+    description: Separates new business from revenue on existing customers.
+    options:
+      - [new_business, New business]
+      - [expansion, Expansion / upsell]
+      - [renewal, Renewal]
+
+  - internal_name: deal_mrr
+    label: Deal MRR
+    type: currency_number
+    owner: Sales
+    requirement: R5
+    description: Monthly recurring revenue of the deal (BRL). The forecast is built on this, not on total amount.
+
+  - internal_name: implementation_fee
+    label: Implementation fee
+    type: currency_number
+    owner: Sales
+    requirement: R5
+    description: One-time implementation fee (BRL).
+
+  - internal_name: primary_pain
+    label: Primary pain
+    type: enumeration
+    owner: Sales
+    requirement: R4
+    description: Main problem the customer wants to solve. Required from the Demo stage.
+    options:
+      - [freight_cost, High freight cost]
+      - [delivery_delays, Delivery delays]
+      - [manual_operations, Manual operations]
+      - [no_visibility, No tracking visibility]
+      - [carrier_management, Carrier management]
+
+  - internal_name: decision_maker_identified
+    label: Decision maker identified
+    type: bool
+    owner: Sales
+    requirement: R4
+    description: Required to move a deal to Proposal.
+
+  - internal_name: buying_timeline
+    label: Buying timeline
+    type: enumeration
+    owner: Sales
+    requirement: R5
+    description: When the customer expects to start using the platform.
+    options:
+      - [under_30_days, Under 30 days]
+      - [one_to_three_months, 1-3 months]
+      - [three_to_six_months, 3-6 months]
+      - [over_six_months, Over 6 months]
+
+  - internal_name: closed_lost_category
+    label: Closed lost category
+    type: enumeration
+    owner: Sales
+    requirement: R6
+    description: Structured reason for losing the deal. Required on Closed lost. HubSpot's free-text closed lost reason stays for details.
+    options:
+      - [price, Price]
+      - [no_decision, No decision / status quo]
+      - [competitor, Chose a competitor]
+      - [timing, Timing]
+      - [missing_feature, Missing feature]
+      - [unresponsive, Stopped responding]

@@ -1,0 +1,31 @@
+# Dynamic segments (active lists) used in daily work. Membership updates automatically.
+
+- name: "[SDR] MQLs without owner"
+  object: contacts
+  requirement: R2
+  purpose: SDR queue. Should be empty at the end of each day (24h SLA).
+  filter: lifecyclestage = 'marketingqualifiedlead' AND hubspot_owner_id IS NULL
+
+- name: "[Marketing] Disqualified leads - not ICP"
+  object: contacts
+  requirement: R3
+  purpose: Feedback loop for Marketing on targeting quality.
+  filter: disqualification_reason = 'not_icp'
+
+- name: "[CS] Customers at risk"
+  object: companies
+  requirement: R8
+  purpose: Weekly CS review of accounts with churn risk.
+  filter: lifecyclestage = 'customer' AND customer_health = 'at_risk'
+
+- name: "[CS] Renewals in the next 90 days"
+  object: companies
+  requirement: R8
+  purpose: Renewal pipeline. Each company here should have an open Expansion and renewal deal.
+  filter: contract_renewal_date >= TODAY() AND contract_renewal_date <= TODAY() + 90 DAYS
+
+- name: "[Sales] Enterprise ICP accounts"
+  object: companies
+  requirement: R11
+  purpose: Target account list for AEs and account-based marketing.
+  filter: company_segment = 'enterprise'
